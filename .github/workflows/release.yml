@@ -39,12 +39,10 @@ jobs:
           path: ./*.tar.gz
   build-linux-arm64:
     runs-on: ubuntu-latest
-    container:
-      image: openjdk:11.0.15-jdk-buster
-      options: --platform linux/arm64 --entrypoint bash
     steps:
       - uses: actions/checkout@v3
-      - run: apt update && apt install g++ make -y
+      - run: >
+          docker run -it --entrypoint bash --platform linux/arm64 -v $(pwd):/work openjdk:11.0.15-jdk-buster -c "apt update && apt install g++ make -y && cd /work && make release"
       - uses: actions/upload-artifact@v3
         with:
           path: ./*.tar.gz
