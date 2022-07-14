@@ -41,12 +41,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: addnab/docker-run-action@v3
+      # - uses: addnab/docker-run-action@v3
+      #   with:
+      #     image: openjdk:11.0.15-jdk-buster
+      #     options: -v ${{ github.workspace }}:/work --platform linux/arm64
+      #     run: apt update && apt install g++ make -y && cd /work && make release
+      - uses: pguyot/arm-runner-action@v2
         with:
-          image: openjdk:11.0.15-jdk-buster
-          options: -v ${{ github.workspace }}:/work --platform linux/arm64
-          run: apt update && apt install g++ make -y && cd /work && make release
-
+          copy_artifact_path: "./*.tar.gz"
+          commands: |
+            sudo apt update && sudo apt install g++ make openjdk-11-dbg -y && cd /work && make release
       # - run: >
       #     docker run --entrypoint bash --platform linux/arm64 -v $(pwd):/work openjdk:11.0.15-jdk-buster -c "apt update && apt install g++ make -y && cd /work && make release"
       - uses: actions/upload-artifact@v3
