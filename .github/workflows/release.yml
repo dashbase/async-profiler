@@ -68,3 +68,4 @@ jobs:
           files: |
             ./artifact/*.tar.gz
             ./artifact/*.zip
+            ./artifact/*.jar
