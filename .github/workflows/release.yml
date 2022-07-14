@@ -1,0 +1,25 @@
+name: Release
+on:
+  - push
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+      - run: make release
+  build-linux-x86:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+      - run: make release
+  build-linux-musl:
+    runs-on: ubuntu-latest
+    container:
+      image: adoptopenjdk/openjdk11:jdk-11.0.15_10-alpine-slim
+    steps:
+      - run: apk add linux-headers make && make release
