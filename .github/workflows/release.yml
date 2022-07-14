@@ -1,6 +1,8 @@
 name: Release
 on:
-  - push
+  push:
+    tags:
+    - "v*.*.*"
 
 jobs:
   build-mac:
@@ -53,7 +55,7 @@ jobs:
           path: ./*.tar.gz
   release:
     runs-on: ubuntu-latest
-    needs: [build-linux-arm64, build-linux-musl, build-linux-x86, build-mac]
+    needs: [build-linux-musl, build-linux-x86, build-mac]
     if: ${{ always() && !(contains(needs.*.result, 'failure')) }}
     steps:
       - uses: actions/download-artifact@v3
