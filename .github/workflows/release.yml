@@ -41,11 +41,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      # - uses: addnab/docker-run-action@v3
-      #   with:
-      #     image: openjdk:11.0.15-jdk-buster
-      #     options: -v ${{ github.workspace }}:/work --platform linux/arm64
-      #     run: apt update && apt install g++ make -y && cd /work && make release
       - uses: pguyot/arm-runner-action@v2
         with:
           base_image: raspios_lite_arm64:2022-01-28
@@ -53,8 +48,19 @@ jobs:
           copy_artifact_path: "./*.tar.gz"
           commands: |
             sudo apt update && sudo apt install g++ make openjdk-11-dbg openjdk-11-jdk -y && export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64 && make release
-      # - run: >
-      #     docker run --entrypoint bash --platform linux/arm64 -v $(pwd):/work openjdk:11.0.15-jdk-buster -c "apt update && apt install g++ make -y && cd /work && make release"
       - uses: actions/upload-artifact@v3
         with:
           path: ./*.tar.gz
+  release:
+    runs-on: ubuntu-latest
+    needs: [build-linux-arm64, build-linux-musl, build-linux-x86, build-mac]
+    if: ${{ always() && !(contains(needs.*.result, 'failure')) }}
+    steps:
+      - uses: actions/download-artifact@v3
+        id: download
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./*.tar.gz
+            ./*.zip
