@@ -8,6 +8,7 @@ jobs:
     steps:
       - uses: actions/setup-java@v3
         with:
+          distribution: 'zulu'
           java-version: '11'
       - run: make release
   build-linux-x86:
@@ -15,6 +16,7 @@ jobs:
     steps:
       - uses: actions/setup-java@v3
         with:
+          distribution: 'zulu'
           java-version: '11'
       - run: make release
   build-linux-musl:
