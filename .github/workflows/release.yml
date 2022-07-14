@@ -45,7 +45,7 @@ jobs:
         with:
           image: openjdk:11.0.15-jdk-buster
           options: -v ${{ github.workspace }}:/work --platform linux/arm64
-        run: apt update && apt install g++ make -y && cd /work && make release
+          run: apt update && apt install g++ make -y && cd /work && make release
 
       # - run: >
       #     docker run --entrypoint bash --platform linux/arm64 -v $(pwd):/work openjdk:11.0.15-jdk-buster -c "apt update && apt install g++ make -y && cd /work && make release"
