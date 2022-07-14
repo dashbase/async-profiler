@@ -14,7 +14,6 @@ jobs:
       - run: make release
       - uses: actions/upload-artifact@v3
         with:
-          name: mac-build
           path: ./*.zip
   build-linux-x86:
     runs-on: ubuntu-latest
@@ -27,7 +26,6 @@ jobs:
       - run: make release
       - uses: actions/upload-artifact@v3
         with:
-          name: linux-x86-build
           path: ./*.tar.gz
   build-linux-musl:
     runs-on: ubuntu-latest
@@ -38,17 +36,15 @@ jobs:
       - run: apk add linux-headers make g++ && make release
       - uses: actions/upload-artifact@v3
         with:
-          name: linux-musl-build
           path: ./*.tar.gz
   build-linux-arm64:
     runs-on: ubuntu-latest
     container:
       image: openjdk:11.0.15-jdk-buster
-      options: --platform linux/arm64
+      options: --platform linux/arm64 --entrypoint bash
     steps:
       - uses: actions/checkout@v3
       - run: apt update && apt install g++ make -y
       - uses: actions/upload-artifact@v3
         with:
-          name: linux-arm64-build
           path: ./*.tar.gz
