@@ -16,7 +16,9 @@ jobs:
       - run: make release
       - uses: actions/upload-artifact@v3
         with:
-          path: ./*.zip
+          path: |
+            ./*.zip
+            ./converter.jar
   build-linux-x86:
     runs-on: ubuntu-latest
     steps:
@@ -55,7 +57,7 @@ jobs:
           path: ./*.tar.gz
   release:
     runs-on: ubuntu-latest
-    needs: [build-linux-musl, build-linux-x86, build-mac]
+    needs: [build-linux-arm64, build-linux-musl, build-linux-x86, build-mac]
     if: ${{ always() && !(contains(needs.*.result, 'failure')) }}
     steps:
       - uses: actions/download-artifact@v3
