@@ -64,5 +64,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ./*.tar.gz
-            ./*.zip
+            ./artifact/*.tar.gz
+            ./artifact/*.zip
