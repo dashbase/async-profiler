@@ -12,6 +12,10 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
       - run: make release
+      - uses: actions/upload-artifact@v3
+        with:
+          name: mac-build
+          path: ./*.zip
   build-linux-x86:
     runs-on: ubuntu-latest
     steps:
@@ -21,10 +25,30 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
       - run: make release
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux-x86-build
+          path: ./*.tar.gz
   build-linux-musl:
     runs-on: ubuntu-latest
     container:
       image: adoptopenjdk/openjdk11:jdk-11.0.15_10-alpine-slim
     steps:
       - uses: actions/checkout@v3
-      - run: apk add linux-headers make && make release
+      - run: apk add linux-headers make g++ && make release
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux-musl-build
+          path: ./*.tar.gz
+  build-linux-arm64:
+    runs-on: ubuntu-latest
+    container:
+      image: openjdk:11.0.15-jdk-buster
+      options: --platform linux/arm64
+    steps:
+      - uses: actions/checkout@v3
+      - run: apt update && apt install g++ make -y
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux-arm64-build
+          path: ./*.tar.gz
